@@ -1,26 +1,14 @@
 // module.js
 
 // Define the custom MaaDice class
-class MaaDice extends DiceTerm {
-    constructor(termData) {
-        super(termData);
-        // Additional custom properties or methods can be defined here if needed
+class MaaDice extends RollTerm {
+    constructor({number = 1, faces, options = {}} = {}) {
+        super({options});
+        this.number = number;
+        this.faces = faces;
     }
 
-    // Override methods if necessary
-    roll({ minimize = false, maximize = false } = {}) {
-        return super.roll({ minimize, maximize });
-    }
-
-    // Define custom modifiers if needed
-    static MODIFIERS = {
-        'customMod': 'yourModifierFunction'
-    };
-
-    // Override getResultLabel if you need custom labels
-    getResultLabel(result) {
-        return super.getResultLabel(result);
-    }
+    static DENOMINATION = "m"; // Define the denomination string
 
     // Define a regex pattern for recognizing this term
     static REGEXP = /(\d+)m(\d+)/i;
@@ -32,19 +20,45 @@ class MaaDice extends DiceTerm {
             faces: parseInt(match[2])
         });
     }
+
+    // Evaluate the roll term
+    _evaluateSync({ minimize = false, maximize = false } = {}) {
+        this.results = [];
+        for (let i = 0; i < this.number; i++) {
+            const roll = new Die({faces: this.faces, number: 1}).roll({minimize, maximize}).results[0].result;
+            this.results.push({result: roll, active: true});
+        }
+
+        const values = this.results.map(r => r.result);
+        if (values.length === 1) {
+            // For a single die roll, return its value directly
+            this.total = values[0];
+        } else {
+            // Compute the difference between the highest and lowest rolls
+            const max = Math.max(...values);
+            const min = Math.min(...values);
+            this.total = max - min;
+        }
+        this._evaluateModifiers();
+        return this;
+    }
+
+    // Return the result labels
+    getResultLabel(result) {
+        return result.result;
+    }
 }
 
 // Register the custom dice term during initialization
 Hooks.once('init', () => {
     CONFIG.Dice.terms['m'] = MaaDice;
-    MaaDice.DENOMINATION = 'm';
     console.log("MaaDice term registered");
 });
 
 // Example function to use the custom dice term in a roll
 async function exampleRoll() {
     const roll = new Roll('2m6 + 4'); // Example roll formula using MaaDice
-    await roll.evaluate({ async: true });
+    await roll.evaluate({async: false}); // Evaluate the roll synchronously
     console.log(`Roll result: ${roll.result}, Total: ${roll.total}`);
     ChatMessage.create({
         user: game.user.id,
