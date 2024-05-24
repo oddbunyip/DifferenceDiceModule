@@ -1,7 +1,7 @@
 // module.js
 
 // Define the custom MaaDice class
-class MaaDice extends RollTerm {
+class MaaDice extends foundry.dice.terms.RollTerm {
     constructor({number = 1, faces, options = {}} = {}) {
         super({options});
         this.number = number;
@@ -25,7 +25,7 @@ class MaaDice extends RollTerm {
     _evaluateSync({ minimize = false, maximize = false } = {}) {
         this.results = [];
         for (let i = 0; i < this.number; i++) {
-            const roll = new Die({faces: this.faces, number: 1}).roll({minimize, maximize}).results[0].result;
+            const roll = new foundry.dice.terms.Die({faces: this.faces, number: 1}).roll({minimize, maximize}).results[0].result;
             this.results.push({result: roll, active: true});
         }
 
@@ -58,7 +58,7 @@ Hooks.once('init', () => {
 // Example function to use the custom dice term in a roll
 async function exampleRoll() {
     const roll = new Roll('2m6 + 4'); // Example roll formula using MaaDice
-    await roll.evaluate({async: false}); // Evaluate the roll synchronously
+    roll.evaluate(); // Evaluate the roll
     console.log(`Roll result: ${roll.result}, Total: ${roll.total}`);
     ChatMessage.create({
         user: game.user.id,
