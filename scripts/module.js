@@ -21,6 +21,17 @@ class MaaDice extends DiceTerm {
     getResultLabel(result) {
         return super.getResultLabel(result);
     }
+
+    // Define a regex pattern for recognizing this term
+    static REGEXP = /(\d+)m(\d+)/i;
+
+    // Define the fromMatch method to create a new instance from a matched regex
+    static fromMatch(match) {
+        return new this({
+            number: parseInt(match[1]),
+            faces: parseInt(match[2])
+        });
+    }
 }
 
 // Register the custom dice term during initialization
