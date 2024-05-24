@@ -1,20 +1,20 @@
 {
-  "id": "module",
-  "title": "New Module",
+  "id": "diffdice",
+  "title": "Difference Dice Script",
   "description": "",
-  "version": "#{VERSION}#",
+  "version": "0.0.2",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {
     "minimum": 10,
-    "verified": 10,
-    "maximum": 11
+    "verified": 12,
+    "maximum": 12
   },
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
-      "discord": "discordID#0001"
+      "name": "Odd Bunyip",
+      "url": "#{URL}#",
+      "discord": "oddbunyip"
     }
   ],
   "relationships": {
@@ -38,8 +38,8 @@
     }
   ],
   "url": "#{URL}#",
-  "manifest": "#{MANIFEST}#",
-  "download": "#{DOWNLOAD}#",
+  "manifest": "https://github.com/oddbunyip/maarworkradio/releases/latest/download/module.json",
+  "download": "https://github.com/oddbunyip/maarworkradio/archive/refs/tags/v0.0.2.zip",
   "license": "LICENSE",
   "readme": "README.md",
   "media": [
