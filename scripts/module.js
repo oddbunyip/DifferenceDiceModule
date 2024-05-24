@@ -60,7 +60,7 @@ function registerCustomDiceRoll() {
 
 // Function to process inline dice rolls in chat messages
 async function processInlineRolls(messageText) {
-    const inlineRollPattern = /\[\[([^\]]+)\]\]/g; // Matches [[XdY + Z]] inline rolls
+    const inlineRollPattern = /\[\[([^\]]+)/g; // Matches [[XdY + Z]] inline rolls
     let match;
 
     while ((match = inlineRollPattern.exec(messageText)) !== null) {
